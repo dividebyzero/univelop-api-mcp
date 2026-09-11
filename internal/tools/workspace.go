@@ -13,13 +13,12 @@ func (r *Registry) registerWorkspace(s *server.MCPServer) {
 		"Get metadata about a workspace (id, labels, timestamps).")
 
 	register(s, tool, func(ctx context.Context, args map[string]interface{}) (*mcp.CallToolResult, error) {
-		c, _, bad := r.clientFor(args)
+		c, pathID, bad := r.clientFor(args)
 		if bad != nil {
 			return bad, nil
 		}
-		wsID := strArg(args, "workspaceId")
 
-		resp, err := c.WorkspaceGet(ctx, wsID)
+		resp, err := c.WorkspaceGet(ctx, pathID)
 		if err != nil {
 			return errResult(err.Error()), nil
 		}
