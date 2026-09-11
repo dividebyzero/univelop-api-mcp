@@ -4,4 +4,4 @@ dist/
 *.pem
 *.cert
 *.key
-*.crt
+*.crttest-config.yaml
