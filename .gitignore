@@ -1,0 +1,7 @@
+bin/
+dist/
+.univelop-mcp/
+*.pem
+*.cert
+*.key
+*.crt
