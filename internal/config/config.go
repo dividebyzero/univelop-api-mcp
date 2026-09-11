@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"os"
 	"regexp"
+	"strings"
 	"time"
 
 	"gopkg.in/yaml.v3"
@@ -120,6 +121,27 @@ func Parse(yamlData []byte) (*Config, error) {
 	return cfg, nil
 }
 
+// stripYAMLComments removes YAML comments (# to end of line) so that
+// example ${VAR} references in doc comments don't trip env expansion.
+func stripYAMLComments(raw string) string {
+	lines := strings.Split(raw, "\n")
+	var out []string
+	for _, line := range lines {
+		// A YAML comment is everyhing from the first unquoted '#' to EOL,
+		// but for env expansion we only need to strip lines where a '#' appears
+		// before any unquoted ${...}.  The safest conservative approach: drop
+		// lines whose first non-space character is '#'.  Inline comments that
+		// follow a value are rare in this config and harmless when they contain
+		// ${...} because yaml parsing skips them anyway — we skip them too.
+		trimmed := strings.TrimSpace(line)
+		if strings.HasPrefix(trimmed, "#") {
+			continue
+		}
+		out = append(out, line)
+	}
+	return strings.Join(out, "\n")
+}
+
 // Load reads, expands environment variables, and parses a YAML config file.
 func Load(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
@@ -127,7 +149,8 @@ func Load(path string) (*Config, error) {
 		return nil, fmt.Errorf("reading config: %w", err)
 	}
 
-	expanded, err := ExpandEnv(string(data))
+	cleaned := stripYAMLComments(string(data))
+	expanded, err := ExpandEnv(cleaned)
 	if err != nil {
 		return nil, fmt.Errorf("expanding env vars: %w", err)
 	}

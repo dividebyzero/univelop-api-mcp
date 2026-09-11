@@ -1,0 +1,35 @@
+# config.example.yaml — Univelop API MCP Server Configuration
+#
+# Copy to config.yaml and adjust.
+# API keys are loaded from environment variables via ${VAR} substitution.
+
+mcp:
+  # TCP port (default: 8443)
+  port: 8443
+  # TLS certificate and key files (PEM format; required for SSE mode)
+  cert_file: "/etc/univelop-mcp/cert.pem"
+  key_file: "/etc/univelop-mcp/key.pem"
+  # MCP server identity
+  name: "Univelop API MCP"
+  version: "0.1.0"
+
+univelop:
+  # Base API URL; can be overridden per workspace
+  default_base_url: "https://app.univelop.de/"
+  # HTTP client settings
+  timeout: "30s"
+  max_retries: 3
+  # Rate limit (requests/second; 0 = unlimited)
+  rate_limit_per_second: 0
+
+workspaces:
+  production:
+    workspace_id: "your-workspace-id-here"
+    api_key: "sk_test123"
+    label: "Production"
+  #  Uncomment and configure additional workspaces:
+  #staging:
+  #  workspace_id: "wkspc_staging_abc123"
+  #  api_key: "${UNIVELOP_API_KEY_STAGING}"
+  #  base_url: "https://dev.univelop.de/"
+  #  label: "Staging"
