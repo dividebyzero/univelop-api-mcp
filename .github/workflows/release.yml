@@ -35,7 +35,7 @@ jobs:
         run: |
           mkdir -p dist
           for pair in "linux/amd64" "linux/arm64" "darwin/amd64" "darwin/arm64" "windows/amd64"; do
-            os="$${pair%%/*}"; arch="$${pair##*/}"; ext=""
+            os="${pair%%/*}"; arch="${pair##*/}"; ext=""
             [ "$os" = "windows" ] && ext=".exe"
             GOOS=$os GOARCH=$arch CGO_ENABLED=0 go build -ldflags="$LDFLAGS" \
               -o "dist/univelop-mcp-${os}-${arch}${ext}" ./cmd/univelop-mcp/
