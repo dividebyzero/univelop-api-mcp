@@ -100,6 +100,7 @@ func (r *Registry) workspaceNames() string {
 // Register adds all 23 MCP tools to the server.
 func (r *Registry) Register(s *server.MCPServer) {
 	r.registerWorkspace(s)
+	r.registerWorkspaceSchema(s)
 	r.registerRecords(s)
 	r.registerBricks(s)
 	r.registerWorkflows(s)

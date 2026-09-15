@@ -25,3 +25,22 @@ func (r *Registry) registerWorkspace(s *server.MCPServer) {
 		return resultText(resp.Body), nil
 	})
 }
+
+// registerWorkspaceSchema registers the workspace_schema tool.
+func (r *Registry) registerWorkspaceSchema(s *server.MCPServer) {
+	tool := newWorkspaceTool(r, "workspace_schema",
+		"List all record specs (lists/tiles) and their brick definitions in a workspace.")
+
+	register(s, tool, func(ctx context.Context, args map[string]interface{}) (*mcp.CallToolResult, error) {
+		c, pathID, bad := r.clientFor(args)
+		if bad != nil {
+			return bad, nil
+		}
+
+		resp, err := c.WorkspaceSchema(ctx, pathID)
+		if err != nil {
+			return errResult(err.Error()), nil
+		}
+		return resultText(resp.Body), nil
+	})
+}
