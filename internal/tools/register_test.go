@@ -83,11 +83,11 @@ func TestRegistryRegistersAllTools(t *testing.T) {
 	s := server.NewMCPServer("test", "0.0.0")
 	r.Register(s)
 	tools := s.ListTools()
-	if len(tools) != 23 {
-		t.Fatalf("expected 23 tools, got %d", len(tools))
+	if len(tools) != 24 {
+		t.Fatalf("expected 24 tools, got %d", len(tools))
 	}
 	for _, want := range []string{
-		"workspace_get",
+		"workspace_get", "workspace_schema",
 		"records_list", "records_create_or_update", "records_update_by_keys",
 		"records_upsert_by_keys", "records_get", "records_update", "records_delete",
 		"records_search",
